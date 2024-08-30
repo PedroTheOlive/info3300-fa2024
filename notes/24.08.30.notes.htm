@@ -68,11 +68,46 @@
     //    We have three different declarations, var, const, and let
     //    Var came earlier, const & let more recently
     //    (only use VAR if you really mean it!)
+    let fruit = "mango";
+    var veg = "broccoli";
+    const legume = "lentil";
+
+    // var is global
+    // let is local
+    // const is immutable
+
+    console.log("----start");
+    console.log(fruit);
+    console.log(veg);    
+    console.log(legume);
+
+    if(fruit === "mango"){
+      let fruit = "apple";
+      var veg = "leek";
+      // legume = "long bean";
+
+      console.log("----in if");
+      console.log(fruit);
+      console.log(veg);    
+      console.log(legume);
+    }
+
+    console.log("----end");
+    console.log(fruit);
+    console.log(veg);    
+    console.log(legume);
+
+
+
     
-    
-          
     // Let's look at *hoisting* of variables
-    
+    console.log(x);
+    var x = 5;
+    console.log(x);
+
+    // Script tags see each other
+    // var gets pushed to the top of the file and is defined before and after it is actually declared
+    // Better to use let
     
     
   
@@ -83,47 +118,99 @@
     
     // If statements:
     
-    
+    let y = 3;
+    if ( y === 3 ) {
+      console.log("equals 3");
+    } else if ( y === 5 ) {
+      console.log("equals 5");
+    } else {
+      console.log("else");
+    }
     
     // Functions:
-    
-  
 
+    console.log(favoriteColor());
+
+    function favoriteColor() {
+      return "red";
+    }
+
+    console.log(favoriteColor());
+
+    let favoriteNumber = function() { return 8; }
+
+    console.log(favoriteNumber());
+
+    function display( f ){
+      console.log( f() );
+    }
+    display( favoriteColor );
+
+    function addOne( number ) {
+      return function() { return number+1; };
+    }
+    console.log( addOne(3)() );
     
-    
+    let bestAnimal = () => { console.log("dog"); }
+    bestAnimal();
+
+    // let addNums = (num1, num2) => { return num1+num2; }
+    let addNums = (num1, num2) => num1+num2; 
+    console.log(addNums(2, 6));
+
+    let addOne = num => num+1;
+    console.log(addOne(11));
     
     // * Brief foray into "destructuring"
     // Javascript can help to destructure objects and arrays during variable assignment
     //  (Credit for some examples goes to https://codeburst.io/es6-destructuring-the-complete-guide-7f842d08b98f -- check this out for lots of other capabilities and examples of destructuring)
     
     
-    // let color = [24, 50, 240];
-    // let r = color[0];
-    // let g = color[1];
-    // let b = color[2];
-    // console.log(r,g,b);
+    let color = [24, 50, 240];
+    //let r = color[0];
+    //let g = color[1];
+    //let b = color[2];
+    let [r, g, b] = color;
+    console.log(r,g,b);
     
     
-    // let student = {name: "Herb Ertlinger", class: "INFO3300", age:21};
-    // 
-    // function printStudent( student ) {   // It also works when function parameters are declared!
-    //   console.log(student.name, student.class);
-    // }
-    // printStudent(student);
+    let student = {name: "Herb Ertlinger", class: "INFO3300", age:21};
+     
+    function printStudent( {name:nm, class:cls, age:a} ) {   // It also works when function parameters are declared!
+      console.log(nm, cls);
+    }
+    printStudent(student);
     
     
-    // let width = 50;
-    // let height = 100;
-    // 
-    // let t = width;
-    // let width = height;
-    // let height = t;
-    // 
-    // console.log(width, height);
+    let width = 50;
+    let height = 100;
+    
+    //let t = width;
+    //width = height;
+    //height = t;
+    
+    [width, height] = [height, width];
+    console.log(width, height);
 
     
     // * Now a bit of looping
-    // let list = ["red","green","blue","yellow"];
+    let list = ["red","green","blue","yellow"];
+
+    for(let i = 0; i<list.length; i++){
+      console.log(list[i]);
+    }
+
+    // in gives indices
+    for (let index in list) {
+      console.log(list[index]);
+    }
+
+    // of gives items in list
+    for(let object of list){
+      console.log(object);
+    }
+
+    list.forEach( d => {console.log(d)} )
     
     
     

@@ -1,0 +1,23 @@
+.llist{
+    display:flex; 
+    flex-direction: row; 
+    max-width: 100%; 
+    flex-wrap: wrap;
+    gap:20px;
+}
+
+.llist li{
+    border: 1px solid black; 
+    padding: 5px 1px; 
+    flex-grow: 1;
+    margin-left: 0px;
+    margin-right: 5px;
+}
+
+li::marker{
+    font-weight: bold;
+}
+
+em{
+    font-weight: bold;
+}

@@ -18,80 +18,74 @@
     
   <div id="p1">
     <em style = "font-weight:bold;">Problem 1:</em>
-    <p class="question">For each of the following items in the list, please identify whether it is a canonical
+    <p>For each of the following items in the list, please identify whether it is a canonical
     Javascript type (i.e., officially documented as a type) or it is not a canonical type. You
     are welcome to use JS documentation such as the mdn web doc for reference.</p>
 
-    <!-- id for a long list that spans its hor. space and takes up multiple lines -->
-    <ol class="answer" style="display:flex; flex-direction: row; max-width: 100%; flex-wrap: wrap;">
-      <li type="a" style="border: 1px solid black; padding:5px; flex-grow: 1;">object: canonical</li>
-      <li type="a" style="border: 1px solid black; padding:5px; flex-grow: 1;">array: canonical</li>
-      <li type="a" style="border: 1px solid black; padding:5px; flex-grow: 1;">boolean: canonical</li>
-      <li type="a" style="border: 1px solid black; padding:5px; flex-grow: 1;">number: canonical</li>
-      <li type="a" style="border: 1px solid black; padding:5px; flex-grow: 1;">class: canonical</li>
-      <li type="a" style="border: 1px solid black; padding:5px; flex-grow: 1;">regex: canonical</li>
-      <li type="a" style="border: 1px solid black; padding:5px; flex-grow: 1;">string: canonical</li>
-      <li type="a" style="border: 1px solid black; padding:5px; flex-grow: 1;">Unicode: not canonical</li>
-      <li type="a" style="border: 1px solid black; padding:5px; flex-grow: 1;">fruit bat: not canonical</li>
-      <li type="a" style="border: 1px solid black; padding:5px; flex-grow: 1;">Imhotep: not canonical</li>
-      <li type="a" style="border: 1px solid black; padding:5px; flex-grow: 1;">function: canonical</li>
-      <li type="a" style="border: 1px solid black; padding:5px; flex-grow: 1;">NaN (Not a Number): canonical</li>
-      <li type="a" style="border: 1px solid black; padding:5px; flex-grow: 1;">char: not canonical</li>
-      <li type="a" style="border: 1px solid black; padding:5px; flex-grow: 1;">pointer: not canonical</li>
-      <li type="a" style="border: 1px solid black; padding:5px; flex-grow: 1;">undefined: canonical</li>
+    <!-- class for a long list that spans its hor. space and takes up multiple lines -->
+    <ol class = "llist">
+      <li type="a">object: canonical</li>
+      <li type="a">array: canonical</li>
+      <li type="a">boolean: canonical</li>
+      <li type="a">number: canonical</li>
+      <li type="a">class: canonical</li>
+      <li type="a">regex: canonical</li>
+      <li type="a">string: canonical</li>
+      <li type="a">Unicode: not canonical</li>
+      <li type="a">fruit bat: not canonical</li>
+      <li type="a">Imhotep: not canonical</li>
+      <li type="a">function: canonical</li>
+      <li type="a">NaN (Not a Number): canonical</li>
+      <li type="a">char: not canonical</li>
+      <li type="a">pointer: not canonical</li>
+      <li type="a">undefined: canonical</li>
     </ol>
   </div>
 
   <div id="p2">
-    <em style = "font-weight:bold;">Problem 2:</em>
-    <p class="question">
+    <em>Problem 2:</em>
+    <p>
       Null is a canonical Javascript type, but it has some unusual or unexpected typeof() behavior. 
       In 1-2 sentences, explain the unusual behavior that it has.
-    </p>
-
-    <p class="answer">
+      <br><br>
       In Javascript, running typeof( null ) in the console returns the type of null being an object 
       rather than as undefined like in other languages.
+      <script >
+        console.log( "typeof( null ) = " + typeof(null) );
+      </script>
     </p>
-    <script >
-      console.log( "typeof( null ) = " + typeof(null) );
-    </script>
   </div>
 
   <div id="p3">
-    <em style = "font-weight:bold;">Problem 3:</em>
-    <p class="question">
+    <em>Problem 3:</em>
+    <p>
       First, in 1-2 sentences, please define type coercion. Then, in your p tag please provide
       two examples where type coercion produces an answer that is unusual or unexpected (i.e.,
       different from Python output or a case where Python would throw an exception). For each
       sample, briefly explain why it is unexpected. Then, in the script section put both of your
       code examples into a console.log() statement so we can see the result (e.g.,
       console.log("apple" + "orange") )
-    </p>
-
-    <p class="answer">
+      <br><br>
       Type coercion is when there is an operation unsupported between two different types and so one 
       type is changed in order to do that operation. For instance, adding 3 to the boolean true would 
       usually lead to a type error but javascript will take true to be the int 1 and return 4. Another 
       instance is in adding the int 10 to the string "10". The string takes precedence and so the int 
       is changed into a string and the operation returns "1010".
+      <script>
+        console.log( "Adding 3 and true..." );
+        console.log( 3 + true );
+        console.log( "Adding 10 and \"10\"..." );
+        console.log( 10 + "10" );
+      </script>
     </p>
-
-    <script>
-      console.log( "Adding 3 and true..." );
-      console.log( 3 + true );
-      console.log( "Adding 10 and \"10\"..." );
-      console.log( 10 + "10" );
-    </script>
   </div>
 
   <div id="p4">
-    <em style = "font-weight:bold;" style = "font-weight:bold;">Problem 4:</em>
-    <p class="question">
+    <em>Problem 4:</em>
+    <p>
       Describe, in your own words, the course policy on late and unreadable work outlined in
       the syllabus, which is linked from the course website. 
-    </p>
-    <p class="answer">
+      <br><br>
       Any and all late work will receive a 0. Furthermore, files that can't be decompressed, missing key 
       files, or incorrect files will also receive a 0. It's recommended to redownload submitted assignments 
       to verify. Becuase this policy is harsher, students also receive 5 slip days for homeworks with up to 

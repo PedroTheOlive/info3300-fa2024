@@ -1,0 +1,134 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>INFO 3300 - HW 2</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,700|Raleway:400,700" rel="stylesheet">
+
+  <link rel="stylesheet" type="text/css" href="../css/normalize.css">
+  <link rel="stylesheet" type="text/css" href="../css/skeleton.css">
+  <link rel="stylesheet" type="text/css" href="../css/custom-style.css">
+  <link rel="stylesheet" type="text/css" href="hw.css">
+
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/styles/default.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/highlight.min.js"></script>
+
+</head>
+<body>
+    <h3>Pedro Arruda - poa22</h3>
+    <h4>Homework 2</h4>
+
+    <div id="p1">
+        <em>Problem 1:</em>
+        <p> In a <em>script</em> tag for this problem, create a recursive function, fact( n ), which takes an
+            integer, n, as an argument and returns the factorial of n. Do not use loops or the built-in
+            factorial functions to accomplish this. Remember that recursion involves two major
+            components: base case(s) and recursive calls of the same function.
+            <br><br>
+            Make sure that your fact function handles negative integers by returning undefined,
+            properly returns 1 for fact( 0 ), and otherwise uses recursion to compute correct factorials
+            for larger integers.
+            <br><br>
+            Include the following code block after your function to prove it works as expected:
+            <br>
+            console.log( fact(-2) );
+            <br>
+            console.log( fact(0) );
+            <br>
+            console.log( fact(1) );
+            <br>
+            console.log( fact(5) );
+            <br>
+            console.log( fact(12) );
+            <br>
+            (As the function is only intended to handle integers, do not worry about implementing the
+            gamma function for decimal numbers)
+
+            <script>
+                function fact( n ){
+                    if( n < 0 ){
+                        return undefined;
+                    }
+                    else if( n == 0){
+                        return 1;
+                    } else {
+                        return n * fact( n - 1 );
+                    }
+                }
+
+                console.log( "fact(-2) = " + fact( -2 ) );
+                console.log( "fact(0) = " + fact( 0 ) );
+                console.log( "fact(1) = " + fact( 1 ) );
+                console.log( "fact(5) = " + fact( 5 ) );
+                console.log( "fact(12) = " + fact( 12 ) );
+            </script>
+        </p>
+    </div>
+
+    <div id="p2">
+        <em>Problem 2:</em>
+        <p>  
+            In class, we learned that <em>path</em> elements can be very useful (see docs <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths">here</a>). In the <em>p</em>
+            tag for this problem, please write a sentence for each of the following commands that
+            describes what it does when it is included in the d attribute of a <em>path</em> element (for example,
+            A tells the path to draw an arc on the canvas):
+            <br><br>
+
+            <ol class="llist">
+                <li>M: This command moves the brush over to the specified pixel coordinates (without drawing a line)</li>
+                <li>L: This command moves the brush over to the specified pixel coordinates (while also drawing a line connecting the two points)</li>
+                <li>V: This command moves the bursh in a vertical line a specified number of pixels (while drawing a line)</li>
+                <li>H: This command moves the bursh in a horizontal line a specified number of pixels (while drawing a line)</li>
+                <li>Z: This command loses the path and draws a line from the current position back to the origin</li>
+            </ol>
+
+        </p>
+    </div>
+
+    <div id="p3">
+        <em>Problem 3:</em>
+        <p>  
+            Since we want you to get more experience working with SVG, we would like you to
+            complete the final problem in this assignment using handwritten SVG elements. You are
+            not permitted to use Javascript for this problem. You can use a 
+            <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Colors/Color_picker_tool">color picker tool</a> 
+            to find good colors, but once again they must appear as literal elements in the file. You may not 
+            use an SVG authoring tool like Adobe Illustrator. We can tell if you use one, and the time it would
+            take to obfuscate their output is much greater than just doing the assignment.
+            <br><br>
+            Create a 400x400 <em>svg</em> canvas element in the <em>p</em> tag for this problem.
+            Use <em>line</em> and <em>rect</em> elements to create your own version of a Piet Mondrian painting in
+            your canvas. <a target="_blank" href="https://www.guggenheim.org/artwork/artist/piet-mondrian">Piet Mondrian</a>
+            was an early 20th century artist who, as a member of the De Stijl
+            movement, reduced his art to three primary colors and black lines in a series of famous
+            neoplasticist works. Here are some examples: <a target="_blank" href="https://www.moma.org/collection/works/80160">one</a>, 
+            <a target="_blank" href="https://www.guggenheim.org/artwork/3014">two</a>, <a target="_blank" href="https://www.guggenheim.org/artwork/3013">three</a>. 
+            As art often thrives in the presence of constraints, here are some rules to follow for your own work:
+            <br><br>
+            • You must include at least 6 lines and 3 rectangles.<br>
+            • <em>line</em> elements must use a black stroke and <em>rect</em> elements must be either white,
+            red, yellow, or blue fill (they do not need to be #F00, #0F0, and #00F, just
+            recognizable shades of those colors).<br>
+            • <em>rect</em> elements cannot have a stroke – only use a fill for them.<br>
+            • If you want black borders, you must use <em>line</em> elements to create them.<br>
+            • You may include additional features you feel would add aesthetic value, such as a
+            frame around the canvas, but you must include required elements to receive credit.<br><br><br>
+            
+            <svg width="400" height="400">
+                <rect x="0" y="0" width="110" height="125" fill="red"></rect>
+                <line x1="110" y1="0" x2="110" y2="400" stroke="black" stroke-width="10"></line>
+                <line x1="0" y1="125" x2="400" y2="125" stroke="black" stroke-width="10"></line>
+                <rect x="380" y="130" width="20" height="100" fill="darkblue"></rect>
+                <line x1="380" y1="130" x2="380" y2="400" stroke="black" stroke-width="10"></line>
+                <line x1="380" y1="230" x2="400" y2="230" stroke="black" stroke-width="10"></line>
+                <rect x="115" y="390" width="170" height="10" fill="yellow"></rect>
+                <line x1="110" y1="385" x2="380" y2="385" stroke="black" stroke-width="10"></line>
+                <rect x="290" y="390" width="90" height="10" fill="black"></rect>
+                <line x1="290" y1="390" x2="290" y2="400" stroke="black" stroke-width="10"></line>
+            </svg>
+        </p>
+    </div>
+
+
+</body>
+</html>

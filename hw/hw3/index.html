@@ -1,0 +1,153 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>INFO 3300 - HW 3</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,700|Raleway:400,700" rel="stylesheet">
+
+  <link rel="stylesheet" type="text/css" href="../css/normalize.css">
+  <link rel="stylesheet" type="text/css" href="../css/skeleton.css">
+  <link rel="stylesheet" type="text/css" href="../css/custom-style.css">
+  <link rel="stylesheet" type="text/css" href="hw.css">
+
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/styles/default.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/highlight.min.js"></script>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+
+</head>
+<body>
+    <h3>Pedro Arruda - poa22</h3>
+    <h4>Homework 3</h4>
+
+    <div id="p1">
+        <em>Problem 1:</em>
+        <p> 
+            In your HTML, please create a 400x400 pixel SVG element. Then, select it using
+            d3.select() in the <b>script</b> section of your code. Unlike in HW2 where you drew things by
+            hand, in this problem you are going to use .append() and .style() functions to build and
+            decorate this canvas. Please use d3 functions to create the following elements in your canvas:
+
+            <ul>
+                <li>
+                    A <b>text</b> element with your given (first) name centered in the exact middle of the SVG
+                    canvas. For example, the Professor’s canvas has “Jeffrey” in the middle of it. Use .attr() to
+                    position it. You are welcome to use text-anchor or adjust the position manually to center it.
+                    The <b>text</b> element should be styled to use a dark blue 30px Courier typeface.
+                </li>
+                <li>
+                    A <b>circle</b> element at (200,200) with a 10px radius so that we can verify that the text is
+                    correctly centered. Please give it a lightgrey fill color and no stroke. It should appear
+                    *behind* the <b>text</b> element.
+                </li>
+                <li>
+                    Two (2) <b>rect</b> elements located in the white space around the text. They should be no
+                    larger than 100px x 100px. Give each of them a different stroke color and fill color. No
+                    two rectangles should overlap or be the same size. Make sure that the colors you choose will
+                    make them stand out to the grader.
+                </li>
+                <li>
+                    One (1) <b>path</b> element located in the white space around the text. You path should create
+                    a *closed* polygon that has 6 obvious sides. Write and assign the d attribute to draw your
+                    shape. Refer to the <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d">
+                    <b>path</b> API</a> if you don’t recall the commands. Do not create a regular
+                    hexagon. Give it unique stroke color and fill color which will stand out to the grader
+                </li>
+            </ul>
+
+            <svg id="svg1">
+
+            </svg>
+            
+            <script>
+                let sv1 = d3.select("#svg1"); 
+
+                sv1.append("circle")
+                    .attr("r", 10)
+                    .attr("cx", 200)
+                    .attr("cy", 200)
+                    .attr("fill", "lightgrey");
+
+                sv1.append("text")
+                    .text("Pedro")
+                    .style("color", "darkblue")
+                    .style("font-family", "courier")
+                    .style("font-size", 30)
+                    .attr("x", 155)
+                    .attr("y", 207);
+
+                sv1.append("rect")
+                    .attr("x", 50)
+                    .attr("y", 300)
+                    .attr("width", 100)
+                    .attr("height", 50)
+                    .attr("fill", "gold")
+                    .attr("stroke", "purple")
+                    .attr("stroke-width", 3);
+
+                sv1.append("rect")
+                    .attr("x", 250)
+                    .attr("y", 300)
+                    .attr("width", 100)
+                    .attr("height", 50)
+                    .attr("fill", "red")
+                    .attr("stroke", "green")
+                    .attr("stroke-width", 3);
+
+                sv1.append("path")
+                    .attr("d", "M 100 50 L 150 25 L 200 50 L 250 25 L 300 50 L 200 150 Z")
+                    .attr("fill", "pink")
+                    .attr("stroke", "red")
+                    .sttr("stroke-width", 3);
+              
+            </script>
+        </p>
+    </div>
+
+    <div id="p2">
+        <em>Problem 2:</em>
+        <p>  
+            Using d3 functions and Wednesday’s lecture
+            materials, create a basic scatterplot programmatically in
+            a <b>script</b> tag. While it should resemble the example
+            image to the right, you don’t need to recreate it exactly,
+            so long as your point and line positions are correct.
+            <br><br>
+            Create a 360x360 pixel SVG element in HTML. Use a CSS
+            style to give the canvas a 1px solid black border. The
+            main plot region, excluding labels, should be a square
+            320x320 pixels in size, running from (20,20) to (340, 340).
+            Reserve the remaining pixels as padding for the labels. 
+            <br><Br>
+            At the bottom of this page, we have included a code
+            version of the dataset. Go ahead and copy it into your <b>script</b> tag. First create x and y linear
+            scale functions that map from data coordinates to SVG pixel coordinates, using the same
+            minimum and maximum values as the chart domain (0 to 10 for both axes). Remember to
+            account for the "padding" pixels when determining the range of pixel positions. If things
+            behave oddly, make sure that you are following the specific syntax that .domain()
+            and .range() expect (hint: how many parameters do they expect to see?).
+            <br><br>
+            Next, create the grid of lines for your chart. While there is a way to make gridlines using d3
+            axes, please manually create gridlines using a for loop. You should create one horizontal line
+            and one vertical line for each number between 0 and 10 (inclusive) in a grey color. A C-style
+            for loop will work best here. Use d3 functions and your scales to .append, set .attr,
+            and .style the lines
+            <br><br>
+            Now, add circles for each point with positions determined by your scales. You don't need to
+            use a data join (taught in two weeks); it's fine if you just create circles one-by-one in a
+            data.forEach or for ___ of ___ loop. Circles should have a radius of 10px and have an
+            indigo color.
+            <br><br>
+
+            <svg id="sv2">
+                
+            </svg>
+            
+            <script>
+
+            </script>
+        </p>
+    </div>
+
+
+</body>
+</html>

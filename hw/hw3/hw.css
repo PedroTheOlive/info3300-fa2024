@@ -32,14 +32,26 @@ p{
     max-width: 1240px;
 }
 
+.svgbox{
+    max-width: 100%;
+    padding: 0 15%;
+}
+
 svg{
     width: 400px; 
     height: 400px;
     border: 6px solid black;
 }
 
-#sv2{
+#canvas{
     border: 1px solid black;
     width: 360px;
     height: 360px;
+}
+
+.scatter{
+    margin: 20 0;
+    width: 320px;
+    height: 320px;
+    border: 1px solid black;
 }

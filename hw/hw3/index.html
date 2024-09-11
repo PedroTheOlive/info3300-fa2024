@@ -54,9 +54,11 @@
                 </li>
             </ul>
 
-            <svg id="svg1">
+            <section class="svgbox">
+                <svg id="svg1">
 
-            </svg>
+                </svg>
+            </section>
             
             <script>
                 let sv1 = d3.select("#svg1"); 
@@ -95,9 +97,9 @@
 
                 sv1.append("path")
                     .attr("d", "M 100 50 L 150 25 L 200 50 L 250 25 L 300 50 L 200 150 Z")
-                    .attr("fill", "pink")
+                    .attr("fill", "blue")
                     .attr("stroke", "red")
-                    .sttr("stroke-width", 3);
+                    .attr("stroke-width", 3);
               
             </script>
         </p>
@@ -138,11 +140,66 @@
             indigo color.
             <br><br>
 
-            <svg id="sv2">
-                
-            </svg>
+            <section class="svgbox">
+                <svg id="canvas">
+                    <g class="scatter" style="display: block;">
+                        <g class="x axis"></g>
+                        <g class="y axis"></g>
+                        <g class="marks"></g>
+                    </g>
+                </svg>
+            </section>
             
             <script>
+                let data = [{"x":1.0 ,"y":9.0},
+                    {"x":1.5 ,"y":6.0},
+                    {"x":2.5 ,"y":4.0},    
+                    {"x":4.0 ,"y":2.0},
+                    {"x":5.0 ,"y":1.6},
+                    {"x":6.0 ,"y":2.4},
+                    {"x":7.0 ,"y":3.0},
+                    {"x":8.0 ,"y":3.4},
+                    {"x":9.0 ,"y":3.6}];
+
+                const margin = 20;
+                const width = 320;
+                const height = 320;
+
+                let xax = d3.select(".x");
+                let yax = d3.select(".y");
+                let points = d3.select(".marks");
+
+                let scale = d3.scaleLinear()
+                    .domain([0, 10])
+                    .range([20, 340]);
+
+                let partition = 20;
+
+                // Create grid lines
+                for(let i = 0; i <= 10; i++){
+                    xax.append("path")
+                        .attr("d", "M " + partition + " 20 L " + partition + " 340 Z")
+                        .attr("stroke-width", 3)
+                        .attr("stroke", "black")
+                        .attr("fill", "black");
+
+                    yax.append("path")
+                        .attr("d", "M 20 " + partition + " L 340 " + partition + " Z")
+                        .attr("stroke-width", 3)
+                        .attr("stroke", "black")
+                        .attr("fill", "black");
+
+                    partition = partition + 32;
+                }
+
+                // Set points
+                for( let i = 0; i < data.length; i++ ){
+                    points.append("circle")
+                        .attr("r", 10)
+                        .attr("fill", "indigo")
+                        .attr("cx", scale( data[i].x ))
+                        .attr("cy", 360 - scale( data[i].y ));
+                }
 
             </script>
         </p>

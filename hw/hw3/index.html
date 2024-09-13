@@ -169,9 +169,13 @@
                 let yax = d3.select(".y");
                 let points = d3.select(".marks");
 
-                let scale = d3.scaleLinear()
+                let xscale = d3.scaleLinear()
                     .domain([0, 10])
                     .range([20, 340]);
+
+                let yscale = d3.scaleLinear()
+                    .domain([0, 10])
+                    .range([340, 20]);
 
                 let partition = 20;
 
@@ -195,8 +199,8 @@
                     points.append("circle")
                         .attr("r", 10)
                         .attr("fill", "indigo")
-                        .attr("cx", scale( data[i].x ))
-                        .attr("cy", 360 - scale( data[i].y ));
+                        .attr("cx", xscale( data[i].x ))
+                        .attr("cy", yscale( data[i].y ));
                 }
 
             </script>

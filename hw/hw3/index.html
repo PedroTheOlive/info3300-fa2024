@@ -179,15 +179,13 @@
                 for(let i = 0; i <= 10; i++){
                     xax.append("path")
                         .attr("d", "M " + partition + " 20 L " + partition + " 340 Z")
-                        .attr("stroke-width", 3)
-                        .attr("stroke", "black")
-                        .attr("fill", "black");
+                        .attr("stroke-width", 1)
+                        .attr("stroke", "lightgrey");
 
                     yax.append("path")
                         .attr("d", "M 20 " + partition + " L 340 " + partition + " Z")
-                        .attr("stroke-width", 3)
-                        .attr("stroke", "black")
-                        .attr("fill", "black");
+                        .attr("stroke-width", 1)
+                        .attr("stroke", "lightgrey");
 
                     partition = partition + 32;
                 }

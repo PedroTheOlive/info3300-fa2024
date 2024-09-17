@@ -1,0 +1,138 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>INFO 3300 - HW 4</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,700|Raleway:400,700" rel="stylesheet">
+
+  <link rel="stylesheet" type="text/css" href="../css/normalize.css">
+  <link rel="stylesheet" type="text/css" href="../css/skeleton.css">
+  <link rel="stylesheet" type="text/css" href="../css/custom-style.css">
+  <link rel="stylesheet" type="text/css" href="hw.css">
+
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/styles/default.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/highlight.min.js"></script>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+
+</head>
+<body>
+    <h3>Pedro Arruda - poa22</h3>
+    <h4>Homework 4</h4>
+    <div>
+        <p id="p1">
+            <em>Problem 1: </em><br><br>
+
+            For each of the following visualizations, identify the marks used and visual
+            channels employed from the list provided. Be as exhaustive as possible. You do not
+            need to supply the precise data attribute – you only need to write the marks and
+            visual channels used.
+
+            <section id="img1">
+                <img src="images/1a.png" alt="Hw 4 image 1A" width="487.5" height="250.5">
+                <caption>
+                    <section>
+                        <em>Marks: </em>
+                        <p>
+                            Multicolored dots, 
+                        </p>
+                    </section>
+                    <section>
+                        <em>Visual Channels: </em>
+                        <p>
+                            Legend scale, bar chart (dots)
+                        </p>
+                    </section>
+                    
+               </caption>
+            </section>
+
+            <section id="img2">
+                <img src="images/1b.png" alt="Hw 4 image 1B" width="487.5" height="250.5">
+                <caption>
+                    <section>
+                        <em>Marks: </em>
+                        <p>
+                            Multicolored dots, 
+                        </p>
+                    </section>
+                    <section>
+                        <em>Visual Channels: </em>
+                        <p>
+                            Legend scale, bar chart (dots)
+                        </p>
+                    </section>
+                    
+               </caption>
+            </section>
+            
+
+
+
+        </p>
+    </div>
+
+    <div>
+        <p id="p2">
+            <em>Problem 2: </em><br><br>
+
+            In this problem we’re going to plot some data about <a href="https://spectrum.ieee.org/the-multiple-lives-of-moores-law">Moore's Law</a>, 
+            which predicted that the number of transistors packed into computer chips would double on a yearly basis. We
+            will make a scatterplot of graphics processing units (GPUs) over the past 20 years using a
+            <a href="https://chip-dataset.vercel.app/">dataset</a> gathered by Sun et al. hoping to see this trend in action.
+            <br><br>
+            The file chip_dataset.json contains a JSON block that defines an array of objects. Each
+            object represents a particular GPU that was or is commercially available. They have several
+            data attributes, but relevant for us will be "Release Day", or the number of days the chip was
+            released after 3/1/2000 (the earliest date in the file), and "Transistors(million)", the
+            number of transistors on the chip in millions. 
+            <br><br>
+
+            <svg>
+
+            </svg>
+
+            <script>
+
+                d3.json("chip_dataset.json").then( (data) => {
+
+                    // Setup
+
+                    console.log(data);
+
+                    const width = 500;
+                    const height = 500;
+                    const margins = { top: 10, right: 10, bottom: 50, left: 50};
+
+                    const chartWidth = width - margins.left - margins.right;
+                    const chartHeight = width - margins.top - margins.bottom;
+
+                    let svg = d3.select("svg")
+                                .attr("height", height)
+                                .attr("width", width)
+                                .style("border", "1px solid black");
+
+                    let chartArea = svg.append("g").attr("transform", `translate(${margins.left}, ${margins.top})`);
+
+                    const releaseExtent = d3.extent(data, d => d['Release Day']);
+                    const xScale = d3.scaleLinear().domain([releaseExtent])
+                                                    .range([0, chartWidth]);
+
+                    const transExtent = d3.extent(data, d => d['Transistors(million)']);
+                    const yScale = d3.scaleLinear().domain([transExtent])
+                                                    .range([chartHeight, 0]);
+
+                    
+
+                });
+
+
+            </script>
+
+
+
+        </p>
+    </div>
+
+
+</body>
+</html>

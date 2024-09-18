@@ -43,7 +43,7 @@ section > * {
     margin:auto;
 }
 
-#img1 img{
+img{
     max-width: 487.5px;
     max-height: 250.5px;
     padding-bottom: 15px;

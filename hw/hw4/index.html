@@ -28,7 +28,7 @@
             visual channels used.
 
             <section id="img1">
-                <img src="images/1a.png" alt="Hw 4 image 1A" width="487.5" height="250.5">
+                <img src="images/1a.png" alt="Hw 4 image 1A">
                 <caption>
                     <section>
                         <em>Marks: </em>
@@ -39,7 +39,7 @@
                     <section>
                         <em>Visual Channels: </em>
                         <p>
-                            Legend scale, bar chart (dots)
+                            Legend scale, stacked position, changing hues indicate percentage
                         </p>
                     </section>
                     
@@ -52,7 +52,7 @@
                     <section>
                         <em>Marks: </em>
                         <p>
-                            Multicolored dots, 
+                            dots, 
                         </p>
                     </section>
                     <section>
@@ -113,6 +113,8 @@
 
                     let chartArea = svg.append("g").attr("transform", `translate(${margins.left}, ${margins.top})`);
 
+                    // Scale setup
+
                     const releaseExtent = d3.extent(data, d => d['Release Day']);
                     const xScale = d3.scaleLinear().domain([releaseExtent])
                                                     .range([0, chartWidth]);
@@ -120,6 +122,13 @@
                     const transExtent = d3.extent(data, d => d['Transistors(million)']);
                     const yScale = d3.scaleLinear().domain([transExtent])
                                                     .range([chartHeight, 0]);
+
+                    // Axis setup
+
+
+
+
+                    // Plotting
 
                     
 

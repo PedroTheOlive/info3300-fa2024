@@ -90,8 +90,9 @@
     const svg = d3.select('svg#scatterplot');
     const width = svg.attr('width');
     const height = svg.attr('height');
+    
 
-    const margins = {top: 10, right: 10, bottom: 50, left: 50}; 
+    const margins = {top: 10, right: 20, bottom: 50, left: 50}; 
     const chartWidth = width - margins.left - margins.right;
     const chartHeight = width - margins.top - margins.bottom;
     
@@ -103,60 +104,89 @@
     // 1. Import some CSV data
     //        .then( function(successfulResult), function(errorMessage) )
 
-    d3.csv( "../datasets/gapminder.csv" ).then( (data) => {
+    d3.csv('../datasets/gapminder.csv').then( (data) => {
     
     
             
     // 2. Check for data issues
     console.log( data );
-    data.forEach( (d) => {
-      if (d['Total Population'] === null){
-        return;
-      }
-      console.log(d);
+
+    data.forEach( (d, i) => {
       d['life'] = Number(d['Life Expectancy']);
       d['gdp'] = Number(d['GDP/Person (PPP$)']);
-      d['pop'] = Number(d['Total Population'].replace(/, /g, ''));
+      d['pop'] = Number(d['Total Population'].replace(/,/g,''));
     });
   
 
+    data = data.filter( (d) => d['gdp']!= 0 && d['life'] != 0 );
+
     // 3. Let's build some scales
-    const gdpExtent = d3.extent(data, d => d['gdp']);
-    const gdpScale = d3.scaleLinear().domain([gdpExtent])
-                                      .range([0, chartWidth]);
+    const gdpExtent = d3.extent(data, d => d['gdp'] );
+    const gdpScale = d3.scaleLinear().domain(gdpExtent)
+                                     .range([0, chartWidth]);
     
-    const lifeExtent = d3.extent(data, d => d['life']);
-    const lifeScale = d3.scaleLinear().domain([lifeExtent]).range([chartHeight, 0]);
+    const lifeExtent = d3.extent(data, d => d['life'] );
+    const lifeScale = d3.scaleLinear().domain(lifeExtent)
+                        .range([chartHeight, 0]); // Using the trick of switching the y max & min to make y positions easy
 
-    const popExtent = d3.extent(data, d => d['pop']);
-    const popScale = d3.scaleLinear().domain([popExtent]).range([chartHeight, 0]);
-
-    
-    
+    const popExtent = d3.extent(data, d => d['pop'] );
+    const popScale = d3.scaleLinear().domain(popExtent)
+                                     .range([5,10]); // circle size
     
     
     
     // 4. Start plotting circles and see what happens
-    
-    
-    
-    
-    
+
+    data.forEach( (d, i) => {
+      chartArea.append('circle')
+                .attr('r', popScale(d['pop']))
+                .attr('cx', gdpScale(d['gdp']))
+                .attr('cy', lifeScale(d['life']))
+                .attr("opacity", 0.8)
+                .attr("index", i)
+                .style("fill", "steelblue");
+    });
     
     // ---- 3
     // 5. Let's add some axes
     // We're going to use D3's axis tools to do it
-    
+
+    let leftAxis = d3.axisLeft(lifeScale);
+    svg.append("g")
+        .attr("class", "y axis")
+        .attr("transform", `translate(${margins.left-10}, ${margins.top})`)
+        .call(leftAxis);
+
+    let bottomAxis = d3.axisBottom(gdpScale).ticks(6);
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", `translate(${margins.left}, ${chartHeight + margins.top + 10})`)
+        .call(bottomAxis);
+
     
     
     
     // 5A. We can manually make some gridlines
     //  It would work fine for HW4, but I don't recommend it once you start using axis labels
+
+    // See hw3 for example
     
     
     
 
     // 5B. Or we can use axes in a clever way
+
+    let leftGridlines = d3.axisLeft(lifeScale).tickFormat("").tickSize(-chartWidth-10);
+    svg.append("g")
+        .attr("class", "y gridline")
+        .attr("transform", `translate(${margins.left-10}, ${margins.top})`)
+        .call(leftGridlines);
+
+    let bottomGridlines = d3.axisBottom(gdpScale).ticks(6).tickFormat("").tickSize(-chartHeight-10);
+    svg.append("g")
+        .attr("class", "x gridline")
+        .attr("transform", `translate(${margins.left}, ${chartHeight + margins.top + 10})`)
+        .call(bottomGridlines);
     
     
     

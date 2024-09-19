@@ -55,3 +55,11 @@ caption{
     flex-direction:column;
     
 }
+
+.gridlines line {
+    stroke: #bbb;
+}
+
+.gridlines .domain {
+    stroke: none;
+}

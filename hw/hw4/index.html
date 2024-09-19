@@ -33,13 +33,13 @@
                     <section>
                         <em>Marks: </em>
                         <p>
-                            Multicolored dots, 
+                            Dots, Sliding Scale (legend), scatterplot
                         </p>
                     </section>
                     <section>
                         <em>Visual Channels: </em>
                         <p>
-                            Legend scale, stacked position, changing hues indicate percentage
+                            stacked position, changing hues indicate percentage, Shaded regions
                         </p>
                     </section>
                     
@@ -51,17 +51,16 @@
                 <caption>
                     <section>
                         <em>Marks: </em>
-                        <p>
-                            dots, 
-                        </p>
+                        <text>
+                            Dog breeds (points), scatterplot
+                        </text>
                     </section>
                     <section>
                         <em>Visual Channels: </em>
-                        <p>
-                            Legend scale, bar chart (dots)
-                        </p>
+                        <text>
+                            Visual representation of breeds, legend (for size and type), coloring and sizing of dogs
+                        </text>
                     </section>
-                    
                </caption>
             </section>
             
@@ -108,28 +107,60 @@
 
                     let svg = d3.select("svg")
                                 .attr("height", height)
-                                .attr("width", width)
-                                .style("border", "1px solid black");
+                                .attr("width", width);
 
                     let chartArea = svg.append("g").attr("transform", `translate(${margins.left}, ${margins.top})`);
 
                     // Scale setup
 
                     const releaseExtent = d3.extent(data, d => d['Release Day']);
-                    const xScale = d3.scaleLinear().domain([releaseExtent])
+                    const xScale = d3.scaleLinear().domain(releaseExtent)
                                                     .range([0, chartWidth]);
 
                     const transExtent = d3.extent(data, d => d['Transistors(million)']);
-                    const yScale = d3.scaleLinear().domain([transExtent])
+                    const yScale = d3.scaleLog().domain(transExtent)
                                                     .range([chartHeight, 0]);
 
                     // Axis setup
 
+                    let leftAxis = d3.axisLeft(yScale);
+                    svg.append("g")
+                        .attr("class", "y axis")
+                        .attr("transform", `translate(${margins.left-10}, ${margins.top})`)
+                        .call(leftAxis);
 
+                    let bottomAxis = d3.axisBottom(xScale);
+                    svg.append("g")
+                        .attr("class", "x axis")
+                        .attr("transform", `translate(${margins.left}, ${chartHeight + margins.top + 10})`)
+                        .call(bottomAxis);
 
+                    // Grid lines
+
+                    let leftGridlines = d3.axisLeft(yScale).ticks(10).tickFormat("").tickSize(-chartWidth-10);
+                    svg.append("g")
+                        .attr("class", "y gridlines")
+                        .attr("transform", `translate(${margins.left-10}, ${margins.top})`)
+                        .style("stroke", "white")
+                        .call(leftGridlines);
+
+                    let bottomGridlines = d3.axisBottom(xScale).tickFormat("").tickSize(-chartHeight-10);
+                    svg.append("g")
+                        .attr("class", "x gridlines")
+                        .attr("transform", `translate(${margins.left}, ${chartHeight + margins.top + 10})`)
+                        .style("stroke", "white")
+                        .call(bottomGridlines);
 
                     // Plotting
 
+                    data.forEach( (d) => {
+                        chartArea.append('circle')
+                                .attr('r', 3)
+                                .attr('cx', xScale(d['Release Day']))
+                                .attr('cy', yScale(d['Transistors(million)']))
+                                .attr("opacity", 0.3)
+                                .style("fill", "darkblue");
+                    });
                     
 
                 });

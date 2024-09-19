@@ -178,17 +178,17 @@
 
     let leftGridlines = d3.axisLeft(lifeScale).tickFormat("").tickSize(-chartWidth-10);
     svg.append("g")
-        .attr("class", "y gridline")
+        .attr("class", "y gridlines")
         .attr("transform", `translate(${margins.left-10}, ${margins.top})`)
         .call(leftGridlines);
 
-    let bottomGridlines = d3.axisBottom(gdpScale).ticks(6).tickFormat("").tickSize(-chartHeight-10);
+    let bottomGridlines = d3.axisBottom(gdpScale).ticks(10).tickFormat("").tickSize(-chartHeight-10);
     svg.append("g")
-        .attr("class", "x gridline")
+        .attr("class", "x gridlines")
         .attr("transform", `translate(${margins.left}, ${chartHeight + margins.top + 10})`)
         .call(bottomGridlines);
     
-    
+    chartArea.raise();
     
     
     

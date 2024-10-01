@@ -25,25 +25,34 @@
                 <li>
                     <section>
                         <img src="images/hw5_1a.png" alt="HW 5 1a image">
-                        <caption>Text</caption>
+                        <caption>
+                            This is a sequential scale since it goes from a dark to light color with no neutral midpoints.<br><br>
+                            I would say this is an effective color scale. The difference between the start and end ranges would be sufficient to show differences in data.<br><br>
+                        </caption>
                     </section>
                 </li>
                 <li>
                     <section>
                         <img src="images/hw5_1b.png" alt="HW 5 1b image">
-                        <caption>Text</caption>
+                        <caption>I would say this is an effective representation for the data since it ranges from two extremes and has a midpoint that is consideredd neutral.<br><br></caption>
                     </section>
                 </li>
                 <li>
                     <section>
                         <img src="images/hw5_1c.png" alt="HW 5 1c image">
-                        <caption>Text</caption>
+                        <caption>
+                            Anomalous Trichromacy: Blue-Weak/Tritanomaly<br><br>
+                            Dichromatic View: Blue-Blind/Tritanopia
+                        </caption>
                     </section>
                 </li>
                 <li>
                     <section>
                         <img src="images/hw5_1d.png" alt="HW 5 1d image">
-                        <caption>Text</caption>
+                        <caption>
+                            I wouldn't recommend using this scale since it has two areas with similar, neutral hues that could be confusing since they lie on opposite ends. 
+                            Having a diverging scale with a more neutral center could more accurately represent the data.<br><br>
+                        </caption>
                     </section>
                 </li>
             </ul>
@@ -55,7 +64,7 @@
             <em>Problem 2: </em><br><br>
 
 
-            <svg>
+            <svg class="shots">
 
             </svg>
 
@@ -69,6 +78,31 @@
                             .style("width", max_width)
                             .style("height", max_height)
                             .style("background-color", background);
+
+
+                d3.csv("NCAA_shots.csv", d3.autotype)
+                    .then( (data) => {
+
+                    console.log(data);
+
+                    let shots = d3.select(".shots");
+
+                    let attemptExtent = d3.extent( data, d => (d['made'] + d['missed']) );
+
+                    let colorScale = d3.scaleLinear(attemptExtent)
+                                        .range([d3.rgb("#a008f2"), d3.rgb("#FFC0CB")])
+                                        .interpolate( d3.interpolatePlasma );
+
+                    shots.selectAll("circle")
+                        .join("circle")
+                        .attr("r", 20)
+                        .attr("cx", d => d["x"] )
+                        .attr("cy", d => d["y"] )
+                        .attr("fill", d => colorScale((d['made'] + d['missed'])) );
+
+
+
+                });
 
             </script>
 

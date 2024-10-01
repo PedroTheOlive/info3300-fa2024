@@ -83,28 +83,99 @@
                 d3.csv("NCAA_shots.csv", d3.autotype)
                     .then( (data) => {
 
-                    console.log(data);
+                    // console.log(data);
+
+
 
                     let shots = d3.select(".shots");
 
-                    let attemptExtent = d3.extent( data, d => (d['made'] + d['missed']) );
+                    let attemptExtent = d3.extent( data, d => d['log_attempt'] );
 
-                    let colorScale = d3.scaleLinear(attemptExtent)
-                                        .range([d3.rgb("#a008f2"), d3.rgb("#FFC0CB")])
-                                        .interpolate( d3.interpolatePlasma );
+                    let colorScale = d3.scaleSequential(attemptExtent, d3.interpolatePlasma);
 
-                    shots.selectAll("circle")
-                        .join("circle")
-                        .attr("r", 20)
-                        .attr("cx", d => d["x"] )
-                        .attr("cy", d => d["y"] )
-                        .attr("fill", d => colorScale((d['made'] + d['missed'])) );
 
+                    let chartShots = shots.selectAll("circle").data(data)
+                                            .join("circle")
+                                            .attr("r", 5)
+                                            .attr("cx", d => Number(d["x"]) )
+                                            .attr("cy", d => Number(d["y"]) )
+                                            .attr("fill", d => colorScale(d['log_attempt']) );
 
 
                 });
 
             </script>
+
+            <div>
+                <em> Part B: </em><br><br>
+                The logarithmic scale provides clarity in the location of the attempts. 
+                Since there is a great difference in the number of shots between locations, 
+                they comparatively appear less important than the one bright spot with a linear scale 
+                and are harder to distinguish amongst similar nodes. However, those spots now appear as 
+                closer in importance to the one bright spot and cannot have negative values associated since the log of a negative number is undefined.<br><br>
+            </div>
+
+        </p>
+    </div>
+
+    <div>
+        <p id="p3">
+            <em>Problem 3: </em><br><br>
+
+            <svg id="svg2">
+
+            </svg>
+            <section>
+                <input id="light" type="range" name="light" min="0" max="200" value="80">
+                <label for="light">Light</label>
+            </section>
+
+            <script>
+                let width2 = 420;
+                let height2 = 420;
+
+                let svg2 = d3.select("#svg2").style("width", width2).style("height", height2).style("border", "1px solid black");
+
+                function hcArray(){
+                    let arr = [];
+                    let index = 0;
+                    for( let c = 0; c <= 100; c += 5){
+                        for( let h = 0; h <= 360 ; h += 18){
+                            arr[index] = { c: c, h: h, index: index};
+                            index++;
+                        }
+                    }
+                    return arr;
+                }
+
+                function showCircles( lightness ){
+                    let array = hcArray();
+                    let hextent = d3.extent( array, a => Number(a["h"]) );
+                    let cextent = d3.extent( array, a => Number(a["c"]) );
+
+                    let hScale = d3.scaleLinear().domain( hextent ).range( [10, width2-10] );
+                    let cScale = d3.scaleLinear().domain( cextent ).range( [height2-10, 10] );
+                    
+                    let lightroom = svg2.selectAll("circle").data(array)
+                                                            .join("circle")
+                                                            .attr("r", 10)
+                                                            .attr("index", a => a["index"])
+                                                            .attr("cx", a => hScale(a["h"]))
+                                                            .attr("cy", a => cScale(a["c"]))
+                                                            .attr("fill", a => d3.hcl(a["h"], a["c"], lightness));
+
+                }
+
+                showCircles( 80 );
+                d3.select("input").on("change", 
+                                        function(){
+                                            let val = Number(document.getElementById("light").value);
+                                            showCircles( val ); 
+                                        });
+            </script>
+
+
+
 
 
         </p>

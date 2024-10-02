@@ -1,0 +1,58 @@
+.llist > *{
+    display:flex; 
+    flex-direction: column; 
+    max-width: 100%; 
+    flex-wrap: wrap;
+    gap:20px;
+}
+
+.llist li > *{
+    border: 1px solid black; 
+    padding: 3px 5px 1px; 
+    flex-grow: 1;
+    margin-left: 0px;
+    margin-right: 5px;
+}
+
+li::marker{
+    font-weight: none;
+}
+
+em{
+    font-weight: bold;
+}
+
+div{
+    border: 1px solid black;
+    padding: 0 3px 0 3px;
+}
+
+p{
+    padding: 0px 20px 0px 20px;
+    max-width: 1240px;
+}
+
+section{
+    display:flex;
+    flex-direction:column;
+    margin-bottom: 20px !important;
+}
+
+section > * {
+    flex-grow: 1;
+    margin:auto;
+}
+
+img{
+    max-width: 487.5px;
+    max-height: 250.5px;
+    padding-bottom: 15px;
+}
+
+.gridlines line {
+    stroke: #bbb;
+}
+
+.gridlines .domain {
+    stroke: none;
+}

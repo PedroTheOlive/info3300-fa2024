@@ -27,9 +27,45 @@
     </script>
     <div>
         <p id="p1">
-            <em>Problem 1: </em><br><br>
+            <em>Problem 1: </em>
+            <section>
 
-            
+                <svg id="svg1"></svg>
+
+
+                <script>
+                    const width = 700;
+                    const height = 700;
+
+                    const margins = {top: 20, bottom: 80, left: 80, right: 20};
+                    const chartWidth = width - margins.left - margins.right;
+                    const chartHeight = width - margins.top - margins.bottom;
+
+                    d3.select("#svg1").style("border", "1px solid black");
+
+                    let chartArea = d3.select("#svg1").style("width", width)
+                                                    .style("height", height)
+                                                    .append("g")
+                                                    .attr("transform", `translate(${margins.left}, ${margins.top})`);
+
+                    let svg1 = d3.select("#svg1");
+
+                    d3.csv("wines.csv", d3.autoType).then((data) => {
+                        // Data filtering
+                        filtered_data = data.map((d) => {
+                            return {
+                                name: String(d.Country),
+                                year: Number(d.Year),
+                                smartphone: Number(d["Smartphone Adoption (%)"]),
+                                voting: Number(d["Voting Participation Rate (%)"]),
+                            };
+                        });
+
+
+
+                    });
+                </script>
+            </section>
 
         </p>
     </div>

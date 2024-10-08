@@ -28,6 +28,70 @@
     <div>
         <p id="p1">
             <em>Problem 1: </em>
+            
+                <ul class="llist">
+                    <li>
+                        <g>
+                            <em>Part 1:</em>
+                            <p>
+                                The first thing I did was to go through every price data and ensure it was represented as a Number without 
+                                commas or dollar signs to avoid errors. There were 1196 elements in this case that were formatted to ensure no errors later.
+                                Then, I discoverd that faulty states were added in including but not limited to Mars, Washingtonne, etc. 
+                                I used a function to identify each unique province and checked the console to see which provinces I should filter out. 
+                                I referenced a list of provinces to filter out and added a condition to the plot circles section to ensure no points 
+                                with those provinces would be plotted.
+                                I did the same with names and discovered that any row with the professors name was a faulty row and added a condition to my if statement 
+                                to ensure none of that data would be plotted.
+                                In total, 76 rows were not included and 1120 points were plotted (displayed counts in console).
+                            </p>
+                        </g>
+                    </li>
+                    <li>
+                        <g>
+                            <em>Part 2:</em>
+                            <p>
+                                <g><em>Scales and Axis: </em>At first I had used a linear scale for both axis however I discovered that the 
+                                    data was highly clustered between 80% and 95%. Because of this, I experimented with using log 
+                                    scales for either or both axis. I discovered that the best way to seperate the prices visually 
+                                    was to use base 3 instead of the default base 10 since it spread the data nice enough to visually understand.
+                                    The y axis however played well with linear scale and, after filtering out bad data points, I discovered that 
+                                    there were no points below 80% or above 98% and thus decided to define my y - domain between 76 and 100 points.
+                                    Through those design choices, the highly clustered data became legible and others could differentiate the points 
+                                    much easier.
+                                </g>
+                            </p>
+                        </g>
+                    </li>
+                    <li>
+                        <g>
+                            <em>Part 3:</em>
+                            <p>
+                                <g><em>Circles: </em>In my circle creation area, I chose to place a condition for each row that would only allow for circles to be 
+                                    created if the data did not have identifiers that I decided to filter out. For instance, if the province or taster name was 
+                                    unnacceptable, it wouldn't create the circle and increement the counter for the amount of data that is left out. I also filled 
+                                    the circles based on the province the data specified and created a dictionary mapping all provinces accepted to a color which 
+                                    I used in picking the circle colors.</g><br><br>
+                                <g><em>Jitter Function: </em>The jitter function allows us to plot multiple points while helping with the overlap of those points. 
+                                    So long as part of the underlying point is visible, people can tell where or how many points lay on one graph. However, This
+                                    introduces noise into the graph and, with enough deviation, can misrepresent the data visually. I got around this by also 
+                                    including the price and point values in the title when a mouseover event occurs.</g>
+                            </p>
+                        </g>
+                    </li>
+                    <li>
+                        <g>
+                            <em>Part 4:</em>
+                            <p>
+                                <g><em>Pros: </em>The mouseover events allows us to hide the titles of the data and gives users the option to 
+                                    learn about specific points at their own pace. It allows for us to display less information that would be 
+                                    visually distracting if it was shown at once.</g><br><br>
+                                <g><em>Cons: </em>In clustered or overlapping points, it can get frustrating to highlight one specific point. 
+                                    In that case, it introduces user frustration.</g>
+                            </p>
+                        </g>
+                    </li>
+                </ul>
+            
             <section>
 
                 <svg id="svg1">
@@ -52,7 +116,7 @@
                                                     .attr("transform", `translate(${margins.left}, ${margins.top})`);
 
                     chartArea.append("text").attr("id", "label")
-                                            .attr("x", margins.left/2)
+                                            .attr("x", -margins.left/2)
                                             .attr("y", -margins.top/2.5)
                                             .style("border", "1px solid black")
                                             .raise();
@@ -166,11 +230,11 @@
                             return result;
                         }
 
-                        // unnaccepted found through previous console.log()
+                        // Get unique accepted values, unnaccepted found through previous console.log()
                         let unnacceptedProv = ["Mars", "Oregano", "Fhloston Paradise", "Washingtonne", "France", "Australia"];
                         let provinces = filteredList( data, 'province', unnacceptedProv);
 
-                        let unnacceptedName = ["Dr. Jeffrey Rzeszotarski", null];
+                        let unnacceptedName = ["Dr. Jeffrey Rzeszotarski"];
                         let names = filteredList( data, 'taster_name', unnacceptedName );
 
                         console.log(provinces);
@@ -187,7 +251,8 @@
 
                         // Plotting
                         
-                        let excluded = 0
+                        let excluded = 0;
+                        let included = 0;
 
                         data.forEach( d => {
                             if(provinces.includes(d["province"]) && names.includes(d["taster_name"])){
@@ -202,20 +267,23 @@
                                                     .attr("title", d["title"])
                                                     .attr("price", d['price'])
                                                     .attr("points", d['points']);
+                                included++;
                             }else{
                                 excluded++;
                             }
                         });
 
-                        console.log("Excluded points due to province and/or name = " + excluded);
+                        console.log("Excluded points due to province and/or name: " + excluded);
+                        console.log("Total plotted points: " + included);
 
                         // Events
                         let circles = chartArea.selectAll("circle");
 
                         circles.on("mouseover", function(){
-                            d3.select(this)
+                            d3.select(this).raise()
                                 .transition().duration(600)
                                 .attr("r", 10)
+                                .attr("opacity", 1)
                                 .attr("stroke-width", 4) 
                                 .attr("stroke","black");
                             
@@ -229,9 +297,10 @@
                         });
 
                         circles.on("mouseout", function(){
-                            d3.select(this)
+                            d3.select(this).lower()
                                 .transition().duration(600)
                                 .attr("r", 4)
+                                .attr("opacity", 0.5)
                                 .attr("stroke-width", 0);
 
                             d3.select("#label")

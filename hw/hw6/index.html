@@ -30,38 +30,213 @@
             <em>Problem 1: </em>
             <section>
 
-                <svg id="svg1"></svg>
+                <svg id="svg1">
+                    
+                </svg>
 
 
                 <script>
-                    const width = 700;
-                    const height = 700;
+                    const width = 800;
+                    const height = 500;
 
-                    const margins = {top: 20, bottom: 80, left: 80, right: 20};
+                    const margins = {top: 40, bottom: 80, left: 80, right: 20};
                     const chartWidth = width - margins.left - margins.right;
-                    const chartHeight = width - margins.top - margins.bottom;
+                    const chartHeight = height - margins.top - margins.bottom;
 
-                    d3.select("#svg1").style("border", "1px solid black");
+                    let svg1 = d3.select("#svg1").style("border", "1px solid black").style("width", width).style("height", height);
 
-                    let chartArea = d3.select("#svg1").style("width", width)
-                                                    .style("height", height)
+                    let chartArea = d3.select("#svg1").append("g")
+                                                    .style("width", chartWidth)
+                                                    .style("height", chartHeight)
                                                     .append("g")
                                                     .attr("transform", `translate(${margins.left}, ${margins.top})`);
 
-                    let svg1 = d3.select("#svg1");
+                    chartArea.append("text").attr("id", "label")
+                                            .attr("x", margins.left/2)
+                                            .attr("y", -margins.top/2.5)
+                                            .style("border", "1px solid black")
+                                            .raise();
 
                     d3.csv("wines.csv", d3.autoType).then((data) => {
-                        // Data filtering
-                        filtered_data = data.map((d) => {
-                            return {
-                                name: String(d.Country),
-                                year: Number(d.Year),
-                                smartphone: Number(d["Smartphone Adoption (%)"]),
-                                voting: Number(d["Voting Participation Rate (%)"]),
-                            };
+                        // Data type adjusting
+                        let adjusted = 0;
+                        data.forEach( d => {
+                            // Adjust prices types
+                            if (!(typeof(d['price']) === Number)){
+                                d['price'] = Number(d['price'].replace(/,/g,"").replace(/\$/g,""));
+                                adjusted++;
+                            }
+
+                        });
+                        console.log("Number of types adjusted = "+adjusted);
+
+                        // Extent setup
+                        const priceExtent = d3.extent( data, (d) => Number(d['price']));
+
+                        const pointExtent = d3.extent( data, (d) => Number(d['points']));
+
+                        // Scale Setup
+
+                        // x-axis : Price
+                        // const priceScale = d3.scaleLinear().domain(priceExtent).range([0, chartWidth]).nice();
+                        const priceScale = d3.scaleLog( [d3.min(priceExtent), d3.max(priceExtent) - 200], [0, chartWidth]).base(3).nice();
+
+                        // y-axis : Points
+                        const pointScale = d3.scaleLinear().domain([d3.min(pointExtent) + 75, d3.max(pointExtent) - 120]).range([chartHeight, 0]).nice();
+                        // const pointScale = d3.scaleLog( pointExtent, [chartHeight, 0]).base(3);
+
+
+                        // Axis, Gridlines, labels
+                        let leftAxis = d3.axisLeft(pointScale).ticks(10);
+                        svg1.append("g")
+                            .attr("class", "y axis")
+                            .attr("transform", `translate(${margins.left-10}, ${margins.top})`)
+                            .call(leftAxis);
+
+                        svg1.append("text")
+                            .attr("class", "y label")
+                            .attr("text-anchor", "end")
+                            .attr("y", 6)
+                            .attr("x", -height / 2 + (margins.bottom - margins.top))
+                            .attr("dy", ".75em")
+                            .attr("transform", "rotate(-90)")
+                            .text("Points");
+
+                        let bottomAxis = d3.axisBottom(priceScale).tickFormat(d3.format("$.2f"));
+                        svg1.append("g")
+                            .attr("class", "x axis")
+                            .attr("transform", `translate(${margins.left}, ${chartHeight + margins.top + 10})`)
+                            .call(bottomAxis);
+
+                        svg1.append("text")
+                            .attr("class", "x label")
+                            .attr("text-anchor", "bottom")
+                            .attr("x", width / 2)
+                            .attr("y", height - (margins.bottom / 4) )
+                            .attr("dx", ".75em")
+                            .text("Price");
+
+                        let leftGridlines = d3.axisLeft(pointScale).tickFormat("").tickSize(-chartWidth-10).ticks(10);
+                        svg1.append("g")
+                            .attr("class", "y gridlines")
+                            .attr("transform", `translate(${margins.left-10}, ${margins.top})`)
+                            .attr("stroke", "grey")
+                            .call(leftGridlines);
+
+                        let bottomGridlines = d3.axisBottom(priceScale).tickFormat("").tickSize(-chartHeight-10);
+                        svg1.append("g")
+                            .attr("class", "x gridlines")
+                            .attr("transform", `translate(${margins.left}, ${chartHeight + margins.top + 10})`)
+                            .attr("stroke", "grey")
+                            .call(bottomGridlines);
+                        
+                        // chartArea.raise();
+
+                        // Jitter function
+                        function jitter(){
+                            return (Math.random() * 6) - 3;
+                        }
+
+                        // Find all Unique ID (for analyzing in the console)
+                        function getUnique(data, field){
+                            let uniqueID = [];
+                            data.forEach( d => {
+                                if( !uniqueID.includes(d[field])){
+                                    uniqueID.push(d[field]);
+                                }
+                            });
+                            return uniqueID;
+                        }
+
+                        // Get all unique provinces/names
+                        let uniProv = getUnique(data, 'province');
+                        let uniName = getUnique(data, 'taster_name');
+
+                        console.log(uniProv);
+                        console.log(uniName);
+
+                        // return a list from data excluding data in filterlist
+                        function filteredList( data, field, filterList){
+                            let result = [];
+                            data.forEach( d => {
+                                if( !filterList.includes(d[field]) && !result.includes(d[field]) ){
+                                    result.push(d[field]);
+                                }
+                            });
+                            return result;
+                        }
+
+                        // unnaccepted found through previous console.log()
+                        let unnacceptedProv = ["Mars", "Oregano", "Fhloston Paradise", "Washingtonne", "France", "Australia"];
+                        let provinces = filteredList( data, 'province', unnacceptedProv);
+
+                        let unnacceptedName = ["Dr. Jeffrey Rzeszotarski", null];
+                        let names = filteredList( data, 'taster_name', unnacceptedName );
+
+                        console.log(provinces);
+                        console.log(names);
+
+                        // Assigning up to 4 state's colors found through console.log(provinces)
+                        let colors = ["red", "yellow", "green", "blue"];
+                        let colorDict = {};
+                        provinces.forEach( (p, i) => {
+                            colorDict[p] = colors[i];
+                        });
+                        
+                        console.log(colorDict);
+
+                        // Plotting
+                        
+                        let excluded = 0
+
+                        data.forEach( d => {
+                            if(provinces.includes(d["province"]) && names.includes(d["taster_name"])){
+                                let xpos = priceScale( d['price'] ) + jitter();
+                                let ypos = pointScale( d['points'] ) + jitter();
+                                chartArea.append('circle')
+                                                    .attr('r', 4)
+                                                    .attr('cx', xpos)
+                                                    .attr('cy', ypos)
+                                                    .attr("opacity", 0.5)
+                                                    .style("fill", colorDict[d["province"]] )
+                                                    .attr("title", d["title"])
+                                                    .attr("price", d['price'])
+                                                    .attr("points", d['points']);
+                            }else{
+                                excluded++;
+                            }
                         });
 
+                        console.log("Excluded points due to province and/or name = " + excluded);
 
+                        // Events
+                        let circles = chartArea.selectAll("circle");
+
+                        circles.on("mouseover", function(){
+                            d3.select(this)
+                                .transition().duration(600)
+                                .attr("r", 10)
+                                .attr("stroke-width", 4) 
+                                .attr("stroke","black");
+                            
+                            let title = d3.select(this).attr('title');
+                        
+                            d3.select("#label")
+                                .text(title + ", Price: $" 
+                                            + d3.select(this).attr('price') 
+                                            + ", Points: " 
+                                            + d3.select(this).attr('points'));
+                        });
+
+                        circles.on("mouseout", function(){
+                            d3.select(this)
+                                .transition().duration(600)
+                                .attr("r", 4)
+                                .attr("stroke-width", 0);
+
+                            d3.select("#label")
+                                .text("");
+                        });
 
                     });
                 </script>

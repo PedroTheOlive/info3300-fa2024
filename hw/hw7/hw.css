@@ -1,25 +1,6 @@
-.llist > *{
-    display:flex; 
-    flex-direction: column; 
-    max-width: 100%; 
-    flex-wrap: wrap;
-    gap:20px;
-}
-
-.llist li > *{
-    border: 1px solid black; 
-    padding: 3px 5px 1px; 
-    flex-grow: 1;
-    margin-left: 0px;
-    margin-right: 5px;
-}
-
-li::marker{
-    font-weight: none;
-}
-
 em{
     font-weight: bold;
+    font-size: xx-large;
 }
 
 div{
@@ -27,7 +8,20 @@ div{
     padding: 0 3px 0 3px;
 }
 
-p{
-    padding: 0px 20px 0px 20px;
-    max-width: 1240px;
+#label{
+    display: flex;
+    flex-direction: column;
+    & > * {
+        text-align: center;
+    }
+}
+
+#thresholds{
+    display:flex;
+    flex-direction:row;
+    max-width: 100%;
+    & > *{
+        flex-grow: 1;
+        text-align: left;
+    }
 }

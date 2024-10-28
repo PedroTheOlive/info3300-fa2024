@@ -3,11 +3,6 @@
   <meta charset="UTF-8">
   <title>INFO 3300 - HW 7</title>
 
-  <link href="https://fonts.googleapis.com/css?family=Lato:400,700|Raleway:400,700" rel="stylesheet">
-
-  <link rel="stylesheet" type="text/css" href="../css/normalize.css">
-  <link rel="stylesheet" type="text/css" href="../css/skeleton.css">
-  <link rel="stylesheet" type="text/css" href="../css/custom-style.css">
   <link rel="stylesheet" type="text/css" href="hw.css">
 
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/styles/default.min.css">
@@ -19,9 +14,84 @@
 <body>
 
     <svg  id="choropleth" height="770" width="990" style="margin:20px"></svg>
+    <div id="label">
+        <p><em>Thresholds</em></p>
+        <ul id="thresholds">
+
+        </ul>
+    </div>
 
     <script>
 
+        const svg = d3.select("#choropleth");
+        const width = svg.attr("width");
+        const height = svg.attr("height");
+        const margin = { top: 20, right: 20, bottom: 20, left:20};
+        const mapWidth = width - margin.left - margin.right;
+        const mapHeight = height - margin.top - margin.bottom;
+        const map = svg.append("g")
+                        .attr("transform","translate("+margin.left+","+margin.top+")");
+                    
+
+        const requestData = async function() {
+            const nyrent = await d3.json("ny_rent.topo.json");
+            console.log(nyrent);
+
+            var state = topojson.feature(nyrent, nyrent.objects.state);
+            var zips = topojson.feature(nyrent, nyrent.objects.zip_codes);
+            var zipsmesh = topojson.mesh(nyrent, nyrent.objects.zip_codes);
+
+            console.log(zips);
+
+            var projection = d3.geoMercator().fitSize([mapWidth, mapHeight], zips);
+            var path = d3.geoPath().projection(projection);
+
+            map.append("path").datum(state)
+                    .attr("class","background")
+                    .attr("d", path)
+                    .style("fill", "lightgrey");
+
+            map.append("g").attr("id", "mapelem").attr("fill", "none");
+
+            let mapelem = d3.select("#mapelem");
+
+            var rent = [];
+            zips.features.forEach(d => {
+                rent.push(d.properties.median_monthly_rent);
+            });
+
+            var colors = ["#4c0099", "#00cccc", "#00FF00", "#ffff33", "#ff0000"]
+
+            const colorScale = d3.scaleQuantile()
+                                .domain( rent )
+                                .range( colors );
+
+            let zipPaths = mapelem.selectAll("path.zip").data(zips.features)
+                                                .join("path")
+                                                .attr("class", "zip")
+                                                .attr("d", path)
+                                                .style("fill", d => colorScale( d.properties.median_monthly_rent ) );
+            
+            mapelem.append("path").datum(zipsmesh)
+                .attr("class","outline")
+                .attr("stroke", "white")
+                .attr("stroke-width", "1px")
+                .attr("d", path);
+
+            mapelem.append("circle")
+                .attr("cx", (projection([-76.4850, 42.4476])[0]))
+                .attr("cy", (projection([-76.4850, 42.4476])[1]))
+                .attr("r", 5);
+
+
+            for(let i = 0; i<colors.length-1; i++){
+                d3.select("#thresholds").append("li").text("$" + colorScale.quantiles()[i]).style("font-size", "larger");
+            };
+
+            
+        }
+
+        requestData();
 
     </script>
 

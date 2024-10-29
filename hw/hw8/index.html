@@ -1,0 +1,131 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>INFO 3300 - HW 7</title>
+
+  <link rel="stylesheet" type="text/css" href="hw.css">
+
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/styles/default.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/highlight.min.js"></script>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+
+</head>
+<body>
+
+    
+    <p id="p1">
+        <div>
+            <em>Problem 1: </em>
+            <svg  id="svg1" width="800" height="400"></svg>
+        </div>
+    </p>
+
+    <script>
+
+        const svg1 = d3.select("#svg1");
+        const width = svg1.attr("width");
+        const height = svg1.attr("height");
+        const margin = { top: 20, right: 20, bottom: 80, left:80};
+        const plotWidth = width - margin.left - margin.right;
+        const plotHeight = height - margin.top - margin.bottom;
+        const plot = svg1.append("g")
+                        .attr("transform","translate("+margin.left+","+margin.top+")");
+
+        d3.json("mariokart_records.json", d3.autoType).then( (data) => {
+
+            console.log(data);
+
+            const parse = d3.timeParse("%Y-%m-%d");
+
+            const dateExtent = d3.extent( [parse(data.earliest_date), parse(data.latest_date)] );
+            const timeScale = d3.scaleTime( dateExtent, [0, plotWidth] ).nice();
+
+            const valExtent = d3.extent( [data.min_value, data.max_value]);
+            console.log(valExtent);
+            const valScale = d3.scaleLinear( valExtent, [plotHeight, 0] ).nice();
+            console.log(valScale);
+
+            let colors = ["red", "orange", "purple", "green", "blue"];
+            let tracks = [];
+            data.timeseries.forEach( d => {
+                if(!tracks.includes(d.track)){
+                    tracks.push(d.track);
+                }
+            });
+            const colorScale = d3.scaleOrdinal( tracks, colors);
+
+            // Axis, Gridlines, labels
+            let leftAxis = d3.axisLeft(valScale);
+            svg1.append("g")
+                .attr("class", "y axis")
+                .attr("transform", `translate(${margin.left-10}, ${margin.top})`)
+                .call(leftAxis);
+
+            svg1.append("text")
+                .attr("class", "y label")
+                .attr("text-anchor", "end")
+                .attr("y", 6)
+                .attr("x", -height / 2 + (margin.bottom - margin.top))
+                .attr("dy", ".75em")
+                .attr("transform", "rotate(-90)")
+                .text("Record Time");
+
+            let bottomAxis = d3.axisBottom(timeScale);
+            svg1.append("g")
+                .attr("class", "x axis")
+                .attr("transform", `translate(${margin.left}, ${plotHeight + margin.top + 10})`)
+                .call(bottomAxis);
+
+            svg1.append("text")
+                .attr("class", "x label")
+                .attr("text-anchor", "bottom")
+                .attr("x", width / 2)
+                .attr("y", height - (margin.bottom / 4) )
+                .attr("dx", ".75em")
+                .text("Year");
+
+            let leftGridlines = d3.axisLeft(valScale).tickFormat("").tickSize(-plotWidth-10).ticks(10);
+            svg1.append("g")
+                .attr("class", "y gridlines")
+                .attr("transform", `translate(${margin.left-10}, ${margin.top})`)
+                .attr("stroke", "grey")
+                .call(leftGridlines);
+
+            let bottomGridlines = d3.axisBottom(timeScale).tickFormat("").tickSize(-plotHeight-10);
+            svg1.append("g")
+                .attr("class", "x gridlines")
+                .attr("transform", `translate(${margin.left}, ${plotHeight + margin.top + 10})`)
+                .attr("stroke", "grey")
+                .call(bottomGridlines);
+            
+
+            // Line generation
+
+            var line = d3.line()
+                        .x( d => timeScale( parse(d['date']) ))
+                        .y( d => valScale(d['record_time']) );
+
+            console.log(line);
+
+            // For each timeseries
+
+            let gTags = plot.selectAll("series").data(data.timeseries)
+                                                .join("g")
+                                                .attr("class", "series")
+                                                .style("stroke", d => colorScale(d.track) );;
+
+            gTags.append("path").attr('d', d => line(d.values) )
+                                .style("stroke-width", "2px")
+                                .style("fill", "none");
+
+            gTags.selectAll("circle").data(d => d.values).join('circle')
+                                                        .attr('r', "2px")
+                                                        .attr('cx', d => timeScale(parse(d.date)) )
+                                                        .attr('cy', d => valScale(d.record_time) )
+                                                        .attr('fill', d => colorScale(d.track) );
+
+        });
+    </script>
+
+</body>
+</html>

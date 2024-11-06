@@ -1,0 +1,22 @@
+em{
+    font-weight: bold;
+    font-size: xx-large;
+}
+
+div{
+    display:flex;
+    flex-direction:column;
+    gap:25px;
+    padding:10px 25px;
+    border: 1px solid black;
+    padding: 0 3px 0 3px;
+}
+
+
+.gridlines line {
+    stroke: #bbb;
+}
+
+.gridlines .domain {
+    stroke: none;
+}
